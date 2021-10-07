@@ -1,0 +1,42 @@
+(defun shiftChar (ch shift)
+    (setq c (char-code ch))
+    (if (/= c 32)
+        (progn
+            (setq c (+ c (mod shift 26)))
+            (if (> c 90)
+                (setq c (- c 26))
+            )
+        )
+    )
+    (return-from shiftChar (code-char c))
+)
+
+(defun encrypt (text shift)
+    (map 'string #'(lambda (c) (shiftChar c shift)) (string-upcase text))
+)
+
+(defun decrypt (text shift)
+    (encrypt text (- shift))
+)
+(
+defun solve (text max)
+    (setq a 0)
+    (loop
+        (format t "Caesar ~a" a)
+        (format t ": ~a ~%"(encrypt text a))
+        (setq a (+ a 1))
+        (when (> a max)(return))
+    )
+)
+
+(let* 
+    ((original-text "This is a test string from Alan")
+        (shift 3)
+        (cipher-text (encrypt original-text shift))
+        (recovered-text (decrypt cipher-text shift))
+    )
+    (solve "HAL" 26)
+    (format t " Original: ~a ~%" original-text)
+    (format t "Encrypted: ~a ~%" cipher-text)
+    (format t "Decrypted: ~a ~%" recovered-text)
+)
